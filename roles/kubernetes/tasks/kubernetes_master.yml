@@ -1,0 +1,19 @@
+- name: Reset the master
+  shell: >
+      kubeadm reset
+  ignore_errors: yes
+
+- name: Bootstrap the master
+  shell: >
+      kubeadm init --pod-network-cidr={{ kube_service_addresses }}
+
+- name: Create kubeadm token for joining nodes with 24h expiration (default)
+  command: "kubeadm token create --print-join-command"
+  run_once: true
+  register: temp_kubeadm_join_command
+
+- name: Set Kubernetes Config env variable
+  template:
+    src: kubernetes-env.sh.j2
+    dest: /etc/profile.d/kubernetes-env.sh
+    mode: 0644

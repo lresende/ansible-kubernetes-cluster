@@ -1,0 +1,10 @@
+
+- name: Reset the minion node
+  shell: >
+      kubeadm reset
+  ignore_errors: yes
+
+
+- name: Join master node
+  shell: >
+     {{ temp_kubeadm_join_command.stdout }}
