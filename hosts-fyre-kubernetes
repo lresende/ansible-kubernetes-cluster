@@ -1,0 +1,11 @@
+[all:vars]
+
+[master]
+lresende-kube-node-1   ansible_host=9.30.51.189
+
+[nodes]
+lresende-kube-node-2   ansible_host=9.30.193.146
+lresende-kube-node-3   ansible_host=9.30.96.10
+lresende-kube-node-4   ansible_host=9.30.96.30
+lresende-kube-node-5   ansible_host=9.30.109.245
+
