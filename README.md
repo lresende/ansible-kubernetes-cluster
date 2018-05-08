@@ -1,4 +1,4 @@
-# Kubernetes and Spark on Kubernetes Ansible deployment scripts
+# Kubernetes and Spark on Kubernetes
 
 This repository defines multiple ansible roles to help deploying and configuring a Kubernetes cluster
 
