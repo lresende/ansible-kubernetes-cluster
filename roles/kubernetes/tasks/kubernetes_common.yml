@@ -42,3 +42,9 @@
 - name: Initialize kubelet
   shell: >
      systemctl enable kubelet && systemctl start kubelet
+
+- name: Install crictl
+  shell: |
+     curl -vLJO -H 'Accept: application/octet-stream' https://github.com/kubernetes-incubator/cri-tools/releases/download/v1.0.0-beta.0/crictl-v1.0.0-beta.0-linux-amd64.tar.gz
+     tar -xvf crictl-v1.0.0-beta.0-linux-amd64.tar.gz --directory /usr/bin/
+     rm -rf crictl-v1.0.0-beta.0-linux-amd64.tar.gz
