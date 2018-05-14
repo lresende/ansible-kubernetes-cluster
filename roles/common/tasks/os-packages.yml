@@ -1,0 +1,10 @@
+- name: install commonly used os dependencies
+  shell:
+     yum install -y unzip bzip2
+
+- name: upgrade all packages
+  shell:
+     yum update -y
+
+- name: clean yum repository
+  shell: "yum clean all"
