@@ -37,6 +37,7 @@ In order to have variable overriding from host inventory, please add the followi
 [defaults]
 host_key_checking = False
 hash_behaviour = merge
+command_warnings = False
 ```
 
 ### Supported/Tested Platform
