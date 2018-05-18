@@ -4,16 +4,21 @@
   ignore_errors: yes
 
 - name: Bootstrap the master
-  shell: >
-      kubeadm init --pod-network-cidr={{ kube_service_addresses }}
+  shell: |
+      systemctl daemon-reload
+      service kubelet restart
+      kubeadm init --apiserver-advertise-address 0.0.0.0 --pod-network-cidr={{ kube_service_addresses }} --ignore-preflight-errors cri
+
+- name: Restart kubelet
+  shell: |
+       systemctl daemon-reload
+       service kubelet restart
 
 - name: Create kubeadm token for joining nodes with 24h expiration (default)
   command: "kubeadm token create --print-join-command"
   run_once: true
   register: temp_kubeadm_join_command
 
-- name: Set Kubernetes Config env variable
-  template:
-    src: kubernetes-env.sh.j2
-    dest: /etc/profile.d/kubernetes-env.sh
-    mode: 0644
+- name: set kubeadm join command
+  set_fact: kubeadm_join_command={{ temp_kubeadm_join_command.stdout }}
+
