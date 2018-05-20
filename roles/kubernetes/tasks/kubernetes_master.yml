@@ -11,12 +11,19 @@
 
 - name: Restart kubelet
   shell: |
-       systemctl daemon-reload
-       service kubelet restart
+      systemctl daemon-reload
+      service kubelet restart
+
+- name: Wait for all pods to be ready
+  shell: |
+      sleep 180
+
+- name: Print status of all pods
+  shell: |
+      kubectl get pod --all-namespaces
 
 - name: Create kubeadm token for joining nodes with 24h expiration (default)
   command: "kubeadm token create --print-join-command"
-  run_once: true
   register: temp_kubeadm_join_command
 
 - name: set kubeadm join command
