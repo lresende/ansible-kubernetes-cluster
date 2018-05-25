@@ -10,20 +10,20 @@
 #- name: Install Dashboard
 #  shell: >
 #    # Dashboard
-#    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/influxdb.yaml
-#    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/grafana.yaml
-#    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/heapster.yaml
+
 #    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/rbac/heapster-rbac.yaml
+#    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/heapster.yaml
+#    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/influxdb.yaml
 #    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 ##   kubectl --kubeconfig=/etc/kubernetes/admin.conf patch deploy kubernetes-dashboard -n kube-system --type json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/args","value":["--auto-generate-certificates","--token-ttl=7200","--heapster-host=http://heapster.kube-system.svc.cluster.local"]}]' # Set args manually
 #
-#- name: Dashboard access manifest
-#  template:
-#    src: dashboard-access.yaml.j2
-#    dest: "{{ install_temp_dir }}/dashboard-access.yaml"
-#    mode: 0644
-#
-#- name: Install Dashboard
-#  shell: >
-#    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-access.yaml
+- name: Dashboard access manifest
+  template:
+    src: dashboard-access.yaml.j2
+    dest: "{{ install_temp_dir }}/dashboard-access.yaml"
+    mode: 0644
 
+- name: Install Dashboard
+  shell: |
+     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-access.yaml
