@@ -1,5 +1,0 @@
-- name: setup spark
-  hosts: all
-  remote_user: root
-  roles:
-    - role: spark
