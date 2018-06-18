@@ -1,0 +1,5 @@
+spark:
+  version: 2.2.0-k8s-0.5.0
+  hadoop_version: 2.7.3
+  # https://github.com/apache-spark-on-k8s/spark/releases/download/v2.2.0-kubernetes-0.5.0/spark-2.2.0-k8s-0.5.0-bin-with-hadoop-2.7.3.tgz
+  download_location: https://github.com/apache-spark-on-k8s/spark/releases/download/v2.2.0-kubernetes-0.5.0
