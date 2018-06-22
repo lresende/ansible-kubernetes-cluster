@@ -81,6 +81,11 @@ The sample playbook below can be used to deploy an Spark using an HDP distributi
 
 ```
 
+### Other roles available
+
+* **jupyter-enterprise-gateway:** Deploy necessary images for Jupyter Enterprise Gateway and supported kernels
+
+
 ### Deploying
 
 ```

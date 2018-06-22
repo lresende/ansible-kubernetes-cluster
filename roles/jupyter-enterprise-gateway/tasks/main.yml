@@ -1,0 +1,18 @@
+
+- name: download enterprise gateway and kernel images
+  shell: |
+    docker pull elyra/kubernetes-enterprise-gateway:dev
+    docker pull elyra/kubernetes-kernel-py:dev
+    docker pull elyra/kubernetes-kernel-tf-py:dev
+    docker pull elyra/kubernetes-kernel-r:dev
+    docker pull elyra/kubernetes-kernel-scala:dev
+
+- name: Deploy Jupyter Enterprise Gatewtay
+  shell: |
+    kubectl apply -f https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/docker/kubernetes-enterprise-gateway/kubernetes-enterprise-gateway.yaml
+  when: inventory_hostname in groups['master']
+
+- name: Update Jupyter Enterprise Gatewtay ACL
+  shell: |
+    kubectl apply -f https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/kubernetes/enterprise-gateway-acl.yaml
+  when: inventory_hostname in groups['master']
