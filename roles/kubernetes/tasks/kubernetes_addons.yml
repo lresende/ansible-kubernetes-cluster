@@ -31,7 +31,7 @@
 - name: Helm/Tiller access manifest
   template:
     src: tiller-access.yaml.j2
-    dest: "{{ install_temp_dir }}/tiller-access.yaml.yaml"
+    dest: "{{ install_temp_dir }}/tiller-access.yaml"
     mode: 0644
 
 - name: Install Helm
