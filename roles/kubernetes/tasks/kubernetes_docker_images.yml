@@ -1,0 +1,6 @@
+- name: download enterprise gateway kernel images
+  shell: |
+    docker pull elyra/kubernetes-kernel-py:dev
+    docker pull elyra/kubernetes-kernel-tf-py:dev
+    docker pull elyra/kubernetes-kernel-r:dev
+    docker pull elyra/kubernetes-kernel-scala:dev

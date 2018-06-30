@@ -20,3 +20,5 @@
 
 - import_tasks: kubernetes_addons.yml
   when: inventory_hostname in groups['master']
+
+- import_tasks: kubernetes_docker_images.yml
