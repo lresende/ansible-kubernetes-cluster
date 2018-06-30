@@ -34,3 +34,17 @@
     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/tiller-access.yaml
     /usr/local/bin/helm init --service-account tiller
 
+- name: Install Ingress (traefik)
+  shell: |
+    kubectl apply -f https://raw.githubusercontent.com/containous/traefik/master/examples/k8s/traefik-rbac.yaml
+    kubectl apply -f https://raw.githubusercontent.com/containous/traefik/master/examples/k8s/traefik-deployment.yaml
+
+- name: Dashboard ingress manifest
+  template:
+    src: dashboard-ingress.yaml.j2
+    dest: "{{ install_temp_dir }}/dashboard-ingress.yaml"
+    mode: 0644
+
+- name: Apply Ingress configuration descriptors
+  shell: |
+     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-ingress.yaml
