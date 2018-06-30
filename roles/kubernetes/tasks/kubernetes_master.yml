@@ -14,9 +14,10 @@
       systemctl daemon-reload
       service kubelet restart
 
+# sleep 10; while true; do incomplete=$(kubectl get pod --all-namespaces | tail -n +2 | grep -Ev '([0-9]+)/\1') || break; sleep 10; done
 - name: Wait for all pods to be ready
-  shell: |
-      sleep 180
+  pause:
+     minutes: 3
 
 - name: Print status of all pods
   shell: |
