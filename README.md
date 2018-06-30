@@ -92,30 +92,3 @@ Example:
 ```
 ansible-playbook --verbose setup-kubernetes.yml -c paramiko -i hosts-fyre-kubernetes
 ```
-
-# Deploying Spark on Kubernetes
-
-
-### Deployment playbook
-
-```
-- name: setup spark
-  hosts: all
-  remote_user: root
-  roles:
-    - role: spark
-```
-
-### Deploying
-
-
-```
-ansible-playbook --verbose <deployment playbook.yml> -i <hosts inventory>
-```
-
-Example:
-
-```
-ansible-playbook --verbose setup-spark.yml -c paramiko -i hosts-fyre-kubernetes
-```
-
