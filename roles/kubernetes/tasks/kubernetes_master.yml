@@ -1,6 +1,6 @@
 - name: Reset the master
   shell: >
-      kubeadm reset
+      kubeadm reset --force
   ignore_errors: yes
 
 - name: Bootstrap the master

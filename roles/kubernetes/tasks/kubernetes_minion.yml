@@ -1,7 +1,7 @@
 
 - name: Reset the minion node
   shell: >
-      kubeadm reset
+      kubeadm reset --force
   ignore_errors: yes
 
 - name: Join master node
