@@ -4,3 +4,4 @@
   roles:
     - role: common
     - role: kubernetes
+    - role: jupyter-enterprise-gateway
