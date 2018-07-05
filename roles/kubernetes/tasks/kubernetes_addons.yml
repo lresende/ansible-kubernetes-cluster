@@ -5,18 +5,19 @@
 #https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/#requirements
 - name: Install Calico Network
   shell: >
-    kubectl apply -f https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/1.7/calico.yaml
+    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/1.7/calico.yaml
 
+#https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 - name: Dashboard security manifest
   template:
-    src: dashboard-insecure.yaml.j2
-    dest: "{{ install_temp_dir }}/dashboard-insecure.yaml"
+    src: dashboard-rbac.yaml.j2
+    dest: "{{ install_temp_dir }}/dashboard-rbac.yaml"
     mode: 0644
 
 - name: Install Dashboard
   shell: |
-     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-insecure.yaml
+     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-rbac.yaml
 
 - name: Helm/Tiller access manifest
   template:
