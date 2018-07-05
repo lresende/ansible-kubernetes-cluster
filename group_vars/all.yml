@@ -17,15 +17,14 @@ install_dir: /opt
 
 
 # Components version
-#kube_version: 1.10.2-0
-kube_version: 1.9.7-0
+kube_version: 1.11.0-0
 
 # Cri-tools version
 #1.11.X	v1.0.0-beta.1	master
 #1.10.X	v1.0.0-beta.0	release-1.0
 #1.9.X	v1.0.0-alpha.0	release-1.9
 
-crictl_version: v1.0.0-alpha.0
+crictl_version: v1.0.0-beta.1
 
 # Kubernetes internal network for services.
 # Kubernetes services will get fake IP addresses from this range.
