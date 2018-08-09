@@ -7,12 +7,7 @@
     docker pull elyra/kubernetes-kernel-r:dev
     docker pull elyra/kubernetes-kernel-scala:dev
 
-- name: Deploy Jupyter Enterprise Gatewtay
+- name: Deploy and Configure ACL for Jupyter Enterprise Gatewtay
   shell: |
-    kubectl apply -f https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/docker/kubernetes-enterprise-gateway/kubernetes-enterprise-gateway.yaml
-  when: inventory_hostname in groups['master']
-
-- name: Update Jupyter Enterprise Gatewtay ACL
-  shell: |
-    kubectl apply -f https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/kubernetes/enterprise-gateway-acl.yaml
+    kubectl apply -f https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/kubernetes/enterprise-gateway.yaml
   when: inventory_hostname in groups['master']
