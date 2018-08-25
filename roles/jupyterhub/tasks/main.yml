@@ -1,3 +1,7 @@
+#
+# Based on documentation from https://zero-to-jupyterhub.readthedocs.io/en/latest/
+#
+
 - name: Add JupyterHub Helm chart repository
   shell: |
     helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
