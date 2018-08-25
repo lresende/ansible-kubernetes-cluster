@@ -1,0 +1,30 @@
+- name: Add JupyterHub Helm chart repository
+  shell: |
+    helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+    helm repo update
+  when: inventory_hostname in groups['master']
+
+- name: Remove previous installation of JupyterHub
+  shell: |
+    kubectl delete namespace {{ jupyterhub.namespace }}
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+
+#    helm delete --purge {{ jupyterhub.release }}
+
+
+- name: Wait for namespace to be removed
+  pause:
+   seconds: 90
+
+- name: Create JupyterHub helm chart configuration
+  template:
+    src: jupyterhub-config.yaml.j2
+    dest: "{{ install_temp_dir }}/jupyterhub-config.yaml"
+    mode: 0644
+
+- name: Install JupyterHub
+  shell: |
+    helm upgrade --install hub jupyterhub/jupyterhub --namespace {{ jupyterhub.namespace }} --version {{ jupyterhub.helm_version }} --values {{ install_temp_dir }}/jupyterhub-config.yaml
+  when: inventory_hostname in groups['master']
