@@ -1,11 +1,10 @@
 
-#- pause:
-#    minutes: 1
-
 #https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/#requirements
 - name: Install Calico Network
-  shell: >
-    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/1.7/calico.yaml
+  shell: |
+    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/hosted/etcd.yaml
+    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/rbac.yaml
+    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/hosted/calico.yaml
 
 #https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 - name: Dashboard security manifest
