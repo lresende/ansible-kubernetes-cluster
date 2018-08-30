@@ -6,6 +6,17 @@
     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/rbac.yaml
     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/hosted/calico.yaml
 
+#https://kubernetes.github.io/ingress-nginx/deploy/
+- name: Add Traefik Ingress deployment descriptor
+  template:
+    src: traefik-ingress.yaml.j2
+    dest: "{{ install_temp_dir }}/traefik-ingress.yaml"
+    mode: 0644
+
+- name: Install Traefik Ingress Controller
+  shell: |
+    kubectl apply -f {{ install_temp_dir }}/traefik-ingress.yaml
+
 #https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 - name: Dashboard security manifest
   template:
@@ -16,7 +27,7 @@
 - name: Install Dashboard
   shell: |
      kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-rbac.yaml
+#     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-rbac.yaml
 
 - name: Helm/Tiller access manifest
   template:
