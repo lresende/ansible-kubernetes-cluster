@@ -1,3 +1,8 @@
+- name: Remove enterprise-gateway namespace
+  shell: |
+    kubectl delete --force namespace enterprise-gateway
+  when: inventory_hostname in groups['master']
+  ignore_errors: yes
 
 - name: download enterprise gateway and kernel images
   shell: |
@@ -10,4 +15,16 @@
 - name: Deploy and Configure ACL for Jupyter Enterprise Gatewtay
   shell: |
     kubectl apply -f https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/kubernetes/enterprise-gateway.yaml
+  when: inventory_hostname in groups['master']
+
+- name: Ingress configuration for Enterprise Gateway
+  template:
+    src: enterprise-gateway-ingress.yaml.j2
+    dest: "{{ install_temp_dir }}/enterprise-gateway-ingress.yaml"
+    mode: 0644
+  when: inventory_hostname in groups['master']
+
+- name: Apply ingress configuration for Enterprise Gateway
+  shell: |
+     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/enterprise-gateway-ingress.yaml
   when: inventory_hostname in groups['master']
