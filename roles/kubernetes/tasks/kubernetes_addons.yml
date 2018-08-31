@@ -17,6 +17,40 @@
   shell: |
     kubectl apply -f {{ install_temp_dir }}/traefik-ingress.yaml
 
+- name: create install dir
+  file: path="{{ install_dir }}/traefik/ssl" state=directory
+
+- name: Generate RSA Key
+  command: openssl genrsa \
+    -out "{{ install_dir }}/traefik/ssl/key.pem" 2048
+  args:
+    creates: "{{ install_dir }}/traefik/ssl/key.pem"
+  when: inventory_hostname in groups['master']
+
+- name: Generate CSR
+  command: openssl req \
+    -new \
+    -subj '/C=US/ST=CA/L=San Jose/O=Traefik/CN={{ groups['master'][0] }}.{{ ansible_domain }}'
+    -key "/opt/traefik/ssl/key.pem" \
+    -out "/opt/traefik/ssl/csr.pem"
+  args:
+    creates: "{{ install_dir }}/traefik/ssl/csr.pem"
+  when: inventory_hostname in groups['master']
+
+- name: Generate Self-signed Certificate
+  command: openssl req \
+    -x509 \
+    -days 1825 \
+    -key "{{ install_dir }}/traefik/ssl/key.pem" \
+    -in "{{ install_dir }}/traefik/ssl/csr.pem" \
+    -out "{{ install_dir }}/traefik/ssl/cert.pem"
+  args:
+    creates: "{{ install_dir }}/traefik/ssl/cert.pem"
+  when: inventory_hostname in groups['master']
+
+- name: Create K8s cert for Traefik
+  shell: "kubectl -n kube-system create secret tls traefik-tls-cert --key={{ install_dir }}/traefik/ssl/key.pem --cert={{ install_dir }}/traefik/ssl/cert.pem"
+
 #https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 - name: Dashboard security manifest
   template:
