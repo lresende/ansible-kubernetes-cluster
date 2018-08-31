@@ -61,7 +61,17 @@
 - name: Install Dashboard
   shell: |
      kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-#     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-rbac.yaml
+     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-rbac.yaml
+
+- name: Add Dashboard Ingress deployment descriptor
+  template:
+    src: dashboard-ingress.yaml.j2
+    dest: "{{ install_temp_dir }}/dashboard-ingress.yaml"
+    mode: 0644
+
+- name: Apply Dashboard Ingress
+  shell: |
+    kubectl apply -f {{ install_temp_dir }}/dashboard-ingress.yaml
 
 - name: Helm/Tiller access manifest
   template:

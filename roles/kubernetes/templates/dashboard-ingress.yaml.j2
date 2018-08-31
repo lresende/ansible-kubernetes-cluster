@@ -1,16 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
+  name: dashboard-ingress
   namespace: kube-system
-  name: kubernetes-dashboard
   annotations:
+    kubernetes.io/ingress.class: traefik
     traefik.frontend.rule.type: PathPrefixStrip
-    service-name: Kubernetes Dashboard
 spec:
   rules:
-    - http:
-        paths:
-          - path: /dashboard
-            backend:
-              serviceName: kubernetes-dashboard
-              servicePort: 443
+  - host: {{ groups['master'][0] }}.{{ ansible_domain }}
+    http:
+      paths:
+      - path: /dashboard
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 443
+  tls:
+   - secretName: traefik-tls-cert
