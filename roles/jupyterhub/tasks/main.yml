@@ -1,7 +1,7 @@
+
 #
 # Based on documentation from https://zero-to-jupyterhub.readthedocs.io/en/latest/
 #
-
 - name: Add JupyterHub Helm chart repository
   shell: |
     helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
@@ -10,25 +10,57 @@
 
 - name: Remove previous installation of JupyterHub
   shell: |
-    kubectl delete namespace {{ jupyterhub.namespace }}
+    kubectl delete --force namespace {{ jupyterhub.namespace }}
   ignore_errors: yes
   when: inventory_hostname in groups['master']
-
-
-#    helm delete --purge {{ jupyterhub.release }}
-
-
-- name: Wait for namespace to be removed
-  pause:
-   seconds: 90
 
 - name: Create JupyterHub helm chart configuration
   template:
     src: jupyterhub-config.yaml.j2
     dest: "{{ install_temp_dir }}/jupyterhub-config.yaml"
     mode: 0644
+  when: inventory_hostname in groups['master']
 
 - name: Install JupyterHub
   shell: |
-    helm upgrade --install hub jupyterhub/jupyterhub --namespace {{ jupyterhub.namespace }} --version {{ jupyterhub.helm_version }} --values {{ install_temp_dir }}/jupyterhub-config.yaml
+    helm upgrade --install --force hub jupyterhub/jupyterhub --namespace {{ jupyterhub.namespace }} --version {{ jupyterhub.helm_version }} --values {{ install_temp_dir }}/jupyterhub-config.yaml
   when: inventory_hostname in groups['master']
+
+#
+# Configure NFS on master
+#
+# References:
+#   https://developer.ibm.com/code/howtos/add-nfs-provisioner-to-ICP
+#   https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-centos-6
+
+- name: install NFS on all nodes
+  shell: |
+     yum install -y nfs-utils nfs-utils-lib
+
+- name: create hub home directory
+  file: path="{{ jupyterhub.home_dir }}" state=directory
+  when: inventory_hostname in groups['master']
+
+- name: create shared NFS directory
+  file: path="{{ jupyterhub.shared_dir }}" state=directory
+  when: inventory_hostname in groups['master']
+
+- name: configure NFS
+  shell: |
+     chkconfig nfs on
+     service rpcbind start
+     service nfs start
+  when: inventory_hostname in groups['master']
+
+- name: Create JupyterHub NSF service descriptor
+  template:
+    src: nfs-deployment-icp.yaml.j2
+    dest: "{{ install_temp_dir }}/nfs-deployment-icp.yaml"
+    mode: 0644
+  when: inventory_hostname in groups['master']
+
+- name: Create NFS service
+  shell: |
+    kubectl apply -f {{ install_temp_dir }}/nfs-deployment-icp.yaml
+  when: inventory_hostname in groups['master']
+
