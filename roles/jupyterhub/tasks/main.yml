@@ -10,7 +10,7 @@
 
 - name: Remove previous installation of JupyterHub
   shell: |
-    kubectl delete --force namespace {{ jupyterhub.namespace }}
+    kubectl delete namespace {{ jupyterhub.namespace }}
   ignore_errors: yes
   when: inventory_hostname in groups['master']
 
@@ -25,6 +25,10 @@
   shell: |
     helm upgrade --install --force hub jupyterhub/jupyterhub --namespace {{ jupyterhub.namespace }} --version {{ jupyterhub.helm_version }} --values {{ install_temp_dir }}/jupyterhub-config.yaml
   when: inventory_hostname in groups['master']
+
+- name: download nb2kg-hub image
+  shell: |
+    docker pull elyra/nb2kg-hub:dev
 
 #
 # Configure NFS on master
@@ -59,8 +63,7 @@
     mode: 0644
   when: inventory_hostname in groups['master']
 
-- name: Create NFS service
+- name: Create NFS provisioner
   shell: |
     kubectl apply -f {{ install_temp_dir }}/nfs-deployment-icp.yaml
   when: inventory_hostname in groups['master']
-
