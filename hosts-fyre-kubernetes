@@ -1,11 +1,10 @@
 [all:vars]
 
 [master]
-lresende-kube-node-1   ansible_host=9.30.211.113 ansible_host_private=172.16.243.70
+lresende-k8-node-1   ansible_host=9.30.109.214   ansible_host_private=172.16.186.211
 
 [nodes]
-lresende-kube-node-2   ansible_host=9.30.211.114 ansible_host_private=172.16.243.71
-lresende-kube-node-3   ansible_host=9.30.211.115 ansible_host_private=172.16.243.72
-lresende-kube-node-4   ansible_host=9.30.211.116 ansible_host_private=172.16.243.73
-lresende-kube-node-5   ansible_host=9.30.211.117 ansible_host_private=172.16.243.74
-
+lresende-k8-node-2   ansible_host=9.30.123.95   ansible_host_private=172.16.202.136
+lresende-k8-node-3   ansible_host=9.30.188.28   ansible_host_private=172.16.202.144
+lresende-k8-node-4   ansible_host=9.30.188.36   ansible_host_private=172.16.203.8
+lresende-k8-node-5   ansible_host=9.30.188.38   ansible_host_private=172.16.210.6

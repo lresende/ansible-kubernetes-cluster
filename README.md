@@ -57,13 +57,13 @@ Below is a host inventory sample definition:
 [all:vars]
 
 [master]
-lresende-kube-node-1   ansible_host=9.30.51.189
+lresende-kube-node-1   ansible_host=9.30.109.214   ansible_host_private=172.16.186.211
 
 [nodes]
-lresende-kube-node-2   ansible_host=9.30.193.146
-lresende-kube-node-3   ansible_host=9.30.96.10
-lresende-kube-node-4   ansible_host=9.30.96.30
-lresende-kube-node-5   ansible_host=9.30.109.245
+lresende-kube-node-2   ansible_host=9.30.123.95   ansible_host_private=172.16.202.136
+lresende-kube-node-3   ansible_host=9.30.188.28   ansible_host_private=172.16.202.144
+lresende-kube-node-4   ansible_host=9.30.188.36   ansible_host_private=172.16.203.8
+lresende-kube-node-5   ansible_host=9.30.188.38   ansible_host_private=172.16.210.6
 ```
 
 # Deploying Kubernetes
@@ -77,14 +77,16 @@ The sample playbook below can be used to deploy an Spark using an HDP distributi
   hosts: all
   remote_user: root
   roles:
+    - role: common
     - role: kubernetes
-
+#   - role: jupyter-enterprise-gateway
+#   - role: jupyterhub
 ```
 
 ### Other roles available
 
 * **jupyter-enterprise-gateway:** Deploy necessary images for Jupyter Enterprise Gateway and supported kernels
-
+* **jupyterhub (experimental):** Deploy JupyterHub environment using custom Notebook image for remote kernels (using Enterprise Gateway)
 
 ### Deploying
 
@@ -108,11 +110,11 @@ ansible-playbook --verbose setup-kubernetes.yml -c paramiko -i hosts-fyre-kubern
   hosts: all
   remote_user: root
   roles:
+    - role: common
     - role: spark
 ```
 
 ### Deploying
-
 
 ```
 ansible-playbook --verbose <deployment playbook.yml> -i <hosts inventory>
