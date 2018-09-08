@@ -43,7 +43,7 @@ command_warnings = False
 ### Supported/Tested Platform
 
 * RHEL 7.x
-* Ansible 2.5.2
+* Ansible 2.6.3
 
 
 # Defining your cluster deployment metadata (host inventory)
