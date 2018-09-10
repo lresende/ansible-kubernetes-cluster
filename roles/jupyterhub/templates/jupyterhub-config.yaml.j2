@@ -4,6 +4,7 @@ hub:
     type: sqlite-memory
   extraConfig: |-
     config = '/etc/jupyter/jupyter_notebook_config.py'
+    c.Spawner.cmd = ['jupyter-labhub']
 proxy:
   secretToken: "1be7550452613d3f1e95c687598c8e4a95e64fbc9efcba374fed187fc254c53f"
 
@@ -19,6 +20,7 @@ ingress:
     - {{ groups['master'][0] }}.{{ ansible_domain }}
 
 singleuser:
+  defaultUrl: "/lab"
   image:
     name: elyra/nb2kg-hub
     tag: dev
