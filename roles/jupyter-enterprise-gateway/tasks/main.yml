@@ -6,11 +6,11 @@
 
 - name: download enterprise gateway and kernel images
   shell: |
-    docker pull elyra/kubernetes-enterprise-gateway:dev
-    docker pull elyra/kubernetes-kernel-py:dev
-    docker pull elyra/kubernetes-kernel-tf-py:dev
-    docker pull elyra/kubernetes-kernel-r:dev
-    docker pull elyra/kubernetes-kernel-scala:dev
+    docker pull elyra/enterprise-gateway:dev
+    docker pull elyra/kernel-py:dev
+    docker pull elyra/kernel-tf-py:dev
+    docker pull elyra/kernel-r:dev
+    docker pull elyra/kernel-scala:dev
 
 - name: Deploy and Configure ACL for Jupyter Enterprise Gatewtay
   shell: |
