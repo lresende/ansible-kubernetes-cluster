@@ -1,3 +1,17 @@
+#
+# Make sure temp directories used by install is always available
+#
+
+- name: create install dir
+  file: path="{{ install_dir }}" state=directory
+
+- name: create temporary install dir
+  file: path="{{ install_temp_dir }}" state=directory
+
+#
+# Deploys Jupyter Enterprise Gateway and download kernel images
+#
+
 - name: Remove enterprise-gateway namespace
   shell: |
     kubectl delete --force namespace enterprise-gateway
