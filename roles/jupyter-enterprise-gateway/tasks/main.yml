@@ -20,15 +20,23 @@
 
 - name: download enterprise gateway and kernel images
   shell: |
-    docker pull elyra/enterprise-gateway:dev
-    docker pull elyra/kernel-py:dev
-    docker pull elyra/kernel-tf-py:dev
-    docker pull elyra/kernel-r:dev
-    docker pull elyra/kernel-scala:dev
+    docker pull elyra/enterprise-gateway:{{ jupyter_enterprise_gateway.image_tag }}
+    docker pull elyra/kernel-py:{{ jupyter_enterprise_gateway.image_tag }}
+    docker pull elyra/kernel-tf-py:{{ jupyter_enterprise_gateway.image_tag }}
+    docker pull elyra/kernel-r:{{ jupyter_enterprise_gateway.image_tag }}
+    docker pull elyra/kernel-scala:{{ jupyter_enterprise_gateway.image_tag }}
 
-- name: Deploy and Configure ACL for Jupyter Enterprise Gatewtay
-  shell: |
-    kubectl apply -f https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/kubernetes/enterprise-gateway.yaml
+- name: download enterprise gateway yaml file, replace image tag and deploy enterprise-gateway
+  block:
+    - get_url:
+        url: https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/kubernetes/enterprise-gateway.yaml
+        dest: "{{ install_temp_dir }}/enterprise-gateway.yaml"
+    - replace:
+        path: "{{ install_temp_dir }}/enterprise-gateway.yaml"
+        regexp: ':VERSION'
+        replace: ':{{ jupyter_enterprise_gateway.image_tag }}'
+    - shell: |
+        kubectl apply -f "{{ install_temp_dir }}/enterprise-gateway.yaml"
   when: inventory_hostname in groups['master']
 
 - name: Ingress configuration for Enterprise Gateway
