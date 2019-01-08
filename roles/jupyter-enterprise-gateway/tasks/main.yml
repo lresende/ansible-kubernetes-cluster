@@ -23,6 +23,7 @@
     docker pull elyra/enterprise-gateway:{{ jupyter_enterprise_gateway.image_tag }}
     docker pull elyra/kernel-py:{{ jupyter_enterprise_gateway.image_tag }}
     docker pull elyra/kernel-tf-py:{{ jupyter_enterprise_gateway.image_tag }}
+    docker pull elyra/kernel-tf-gpu-py:{{ jupyter_enterprise_gateway.image_tag }}
     docker pull elyra/kernel-r:{{ jupyter_enterprise_gateway.image_tag }}
     docker pull elyra/kernel-scala:{{ jupyter_enterprise_gateway.image_tag }}
 
