@@ -37,7 +37,7 @@
 
 - name: download nb2kg-hub image
   shell: |
-    docker pull elyra/nb2kg:2.0.0.dev0
+    docker pull elyra/nb2kg:dev
 
 #
 # Configure NFS on master
