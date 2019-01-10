@@ -26,7 +26,7 @@ kube_version: 1.11.0-0
 
 crictl_version: v1.0.0-beta.1
 
-helm_version: 2.9.1
+helm_version: 2.12.1
 
 # Kubernetes internal network for services.
 # Kubernetes services will get fake IP addresses from this range.
