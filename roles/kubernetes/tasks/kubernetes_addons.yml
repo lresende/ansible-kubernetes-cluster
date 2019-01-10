@@ -81,9 +81,10 @@
 
 - name: Install Helm
   shell: |
-    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v{{ helm_version }}-linux-amd64.tar.gz
     mkdir /opt/helm
-    tar -xvf helm-v2.9.1-linux-amd64.tar.gz --strip 1 --directory /opt/helm
+    tar -xvf helm-v{{ helm_version }}-linux-amd64.tar.gz --strip 1 --directory /opt/helm
+    rm helm-v{{ helm_version }}-linux-amd64.tar.gz
     chmod u+x /opt/helm/helm
     ln -s /opt/helm/helm /usr/local/bin/helm
     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/tiller-access.yaml
