@@ -3,6 +3,19 @@ hub:
   db:
     type: sqlite-memory
   extraConfig: |-
+    from kubespawner import KubeSpawner
+    from tornado import gen
+    import yaml
+
+    class CustomKubeSpawner(KubeSpawner):
+        def get_env(self):
+            env = super().get_env()
+
+            env['KG_HTTP_USER'] =  self.user.name
+            env['KERNEL_USERNAME'] =  self.user.name
+
+            return env
+    c.JupyterHub.spawner_class = CustomKubeSpawner
     config = '/etc/jupyter/jupyter_notebook_config.py'
     c.Spawner.cmd = ['jupyter-labhub']
 proxy:
@@ -29,8 +42,6 @@ singleuser:
       storageClass: nfs-dynamic
   extraEnv:
     KG_URL: http://{{ groups['master'][0] }}.{{ ansible_domain }}/gateway
-    KG_HTTP_USER: jovyan
-    KERNEL_USERNAME: jovyan
     KG_REQUEST_TIMEOUT: 60
 
 rbac:
