@@ -15,18 +15,21 @@ host_key_checking: False
 install_temp_dir: /tmp/ansible-install
 install_dir: /opt
 
-
 # Components version
-kube_version: 1.11.0-0
+kube_version: 1.13.2-0
 
 # Cri-tools version
-#1.11.X	v1.0.0-beta.1	master
-#1.10.X	v1.0.0-beta.0	release-1.0
-#1.9.X	v1.0.0-alpha.0	release-1.9
+#1.13.X 	v1.13.0 	   master
+#1.12.X 	v1.12.0 	   release-1.12
+#1.11.X 	v1.11.1 	   release-1.11
+#1.10.X 	v1.0.0-beta.2  release-1.10
+#1.9.X 	    v1.0.0-alpha.1 release-1.9
+#1.8.X 	    v0.2 	       release-1.8
+#1.7.X 	    v0.1 	       release-1.7
 
-crictl_version: v1.0.0-beta.1
+crictl_version: v1.13.0
 
-helm_version: 2.12.1
+helm_version: 2.12.2
 
 # Kubernetes internal network for services.
 # Kubernetes services will get fake IP addresses from this range.
@@ -36,7 +39,6 @@ kube_service_addresses: 10.244.0.0/16
 
 # Prefix length of kube_overlay_ip range.
 kube_overlay_prefix: 16
-
 
 # Internal DNS configuration.
 # Kubernetes can create and mainatain its own DNS server to resolve service names
