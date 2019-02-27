@@ -42,7 +42,7 @@ singleuser:
       storageClass: nfs-dynamic
   extraEnv:
     KG_URL: http://{{ groups['master'][0] }}.{{ ansible_domain }}/gateway
-    KG_REQUEST_TIMEOUT: 60
+    KG_REQUEST_TIMEOUT: "60"
 
 rbac:
   enabled: true
