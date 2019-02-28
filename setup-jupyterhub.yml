@@ -1,5 +1,0 @@
-- name: setup kubernetes
-  hosts: all
-  remote_user: root
-  roles:
-    - role: jupyterhub
