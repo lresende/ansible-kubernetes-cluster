@@ -11,16 +11,17 @@
 #
 # Based on documentation from https://zero-to-jupyterhub.readthedocs.io/en/latest/
 #
-- name: Add JupyterHub Helm chart repository
-  shell: |
-    helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-    helm repo update
-  when: inventory_hostname in groups['master']
 
 - name: Remove previous installation of JupyterHub
   shell: |
     kubectl delete namespace {{ jupyterhub.namespace }}
   ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+- name: Add JupyterHub Helm chart repository
+  shell: |
+    helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+    helm repo update
   when: inventory_hostname in groups['master']
 
 - name: Create JupyterHub helm chart configuration
@@ -35,9 +36,45 @@
     helm upgrade --install --force hub jupyterhub/jupyterhub --namespace {{ jupyterhub.namespace }} --version {{ jupyterhub.helm_version }} --values {{ install_temp_dir }}/jupyterhub-config.yaml
   when: inventory_hostname in groups['master']
 
-- name: download nb2kg-hub image
+- name: Wait for pods to be initialized
+  shell: |
+    kubectl -n hub wait --for=condition=Ready --selector='app=jupyterhub' --timeout=30s pods
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+- name: Remove original hub Role
+  shell: |
+    kubectl -n hub delete role hub
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+- name: Remove original hub RoleBinding
+  shell: |
+    kubectl -n hub delete rolebinding hub
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+# update hub service account to enable namespace creation, etc
+- name: Add JupyterHub RBAC update definition
+  template:
+    src: jupyterhub-rbac.yaml.j2
+    dest: "{{ install_temp_dir }}/jupyterhub-rbac.yaml"
+    mode: 0644
+  when: inventory_hostname in groups['master']
+
+- name: Update JupyterHub RBAC definition
+  shell: |
+    kubectl apply -f {{ install_temp_dir }}/jupyterhub-rbac.yaml
+  when: inventory_hostname in groups['master']
+
+- name: download nb2kg image
   shell: |
     docker pull elyra/nb2kg:dev
+
+- name: download hub image
+  shell: |
+    docker rmi lresende/k8s-hub:latest
+    docker pull lresende/k8s-hub:latest
 
 #
 # Configure NFS on master

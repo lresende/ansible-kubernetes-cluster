@@ -1,5 +1,7 @@
 hub:
-#  baseUrl: hub
+  image:
+    name: lresende/k8s-hub
+    tag: latest
   db:
     type: sqlite-memory
   extraConfig: |-
@@ -18,6 +20,7 @@ hub:
     c.JupyterHub.spawner_class = CustomKubeSpawner
     config = '/etc/jupyter/jupyter_notebook_config.py'
     c.Spawner.cmd = ['jupyter-labhub']
+    c.KubeSpawner.namespace_name_template = 'hub-{username}'
 proxy:
   secretToken: "1be7550452613d3f1e95c687598c8e4a95e64fbc9efcba374fed187fc254c53f"
 
