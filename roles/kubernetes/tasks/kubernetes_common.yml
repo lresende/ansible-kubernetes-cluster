@@ -74,10 +74,6 @@
   shell: >
      yum install -y kubectl-{{ kube_version }}.x86_64
 
-- name: Install Kubernetes-cni
-  shell: >
-     yum install -y kubernetes-cni
-
 - debug:
      msg: "Downloading cri-tools from: http://github.com/kubernetes-incubator/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-linux-amd64.tar.gz"
 
