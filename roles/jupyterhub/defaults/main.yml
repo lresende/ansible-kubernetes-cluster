@@ -1,6 +1,6 @@
 jupyterhub:
   namespace: hub
-  helm_version: 0.8.0 # helm version coming from: https://jupyterhub.github.io/helm-chart/
+  helm_version: 0.8.2 # helm version coming from: https://jupyterhub.github.io/helm-chart/
   home_dir: /opt/hub
   shared_dir: /opt/hub/shared
   mount_dir: /export
