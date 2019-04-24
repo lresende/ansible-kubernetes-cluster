@@ -56,7 +56,7 @@
 
 - name: Initialize docker
   shell: >
-     systemctl enable docker && systemctl start docker
+     systemctl --force enable docker && systemctl start docker
 
 - name: Install Kubelet
   shell: >
@@ -64,7 +64,7 @@
 
 - name: Initialize kubelet
   shell: >
-     systemctl enable kubelet && systemctl start kubelet
+     systemctl --force enable kubelet && systemctl start kubelet
 
 - name: Install Kubeadm
   shell: >

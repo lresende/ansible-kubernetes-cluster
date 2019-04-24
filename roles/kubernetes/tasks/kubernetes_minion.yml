@@ -7,6 +7,6 @@
 - name: Join master node
   shell: |
     systemctl daemon-reload
-    service kubelet restart
+    systemctl restart kubelet
     {{ hostvars.get(groups['master'][0]).get('kubeadm_join_command') }} --ignore-preflight-errors cri
 
