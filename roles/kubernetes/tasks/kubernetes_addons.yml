@@ -2,9 +2,7 @@
 #https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/#requirements
 - name: Install Calico Network
   shell: |
-    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/hosted/etcd.yaml
-    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/rbac.yaml
-    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/hosted/calico.yaml
+    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 
 #https://kubernetes.github.io/ingress-nginx/deploy/
 - name: Add Traefik Ingress deployment descriptor
