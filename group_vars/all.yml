@@ -16,7 +16,7 @@ install_temp_dir: /tmp/ansible-install
 install_dir: /opt
 
 # Components version
-kube_version: 1.13.2-0
+kube_version: 1.14.8-0
 
 # Cri-tools version
 #1.13.X 	v1.13.0 	   master
@@ -27,9 +27,9 @@ kube_version: 1.13.2-0
 #1.8.X 	    v0.2 	       release-1.8
 #1.7.X 	    v0.1 	       release-1.7
 
-crictl_version: v1.13.0
+crictl_version: v1.14.0
 
-helm_version: 2.12.2
+helm_version: 2.13.0
 
 # Kubernetes internal network for services.
 # Kubernetes services will get fake IP addresses from this range.
