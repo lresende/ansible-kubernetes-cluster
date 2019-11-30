@@ -79,7 +79,9 @@
 
 - name: Install Helm
   shell: |
-    wget https://storage.googleapis.com/kubernetes-helm/helm-v{{ helm_version }}-linux-amd64.tar.gz
+    rm -rf /opt/helm
+    rm /usr/local/bin/helm
+    wget https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
     mkdir /opt/helm
     tar -xvf helm-v{{ helm_version }}-linux-amd64.tar.gz --strip 1 --directory /opt/helm
     rm helm-v{{ helm_version }}-linux-amd64.tar.gz
