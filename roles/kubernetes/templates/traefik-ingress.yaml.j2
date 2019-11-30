@@ -18,6 +18,7 @@ rules:
   - apiGroups:
       - ""
     resources:
+      - pods
       - services
       - endpoints
       - secrets
@@ -63,7 +64,7 @@ metadata:
 ---
 
 kind: DaemonSet
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: traefik-ingress-controller
   namespace: ingress-traefik
@@ -72,6 +73,9 @@ metadata:
     app.kubernetes.io/name: ingress-traefik
     app.kubernetes.io/part-of: ingress-traefik
 spec:
+  selector:
+    matchLabels:
+      k8s-app: traefik-ingress-lb
   template:
     metadata:
       labels:
@@ -87,7 +91,7 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       containers:
-      - image: traefik
+      - image: traefik:1.7
         name: traefik-ingress-lb
         ports:
         - name: http
