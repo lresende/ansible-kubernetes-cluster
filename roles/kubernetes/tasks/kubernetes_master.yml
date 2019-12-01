@@ -3,6 +3,11 @@
       kubeadm reset --force
   ignore_errors: yes
 
+- name: Remove old/obsolete configurations
+  shell: >
+      rm -rf /etc/kubernetes/
+  ignore_errors: yes
+
 - name: Bootstrap the master
   shell: |
       systemctl daemon-reload
