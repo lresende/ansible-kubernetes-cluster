@@ -5,6 +5,7 @@
     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 
 #https://kubernetes.github.io/ingress-nginx/deploy/
+##https://github.com/containous/traefik/blob/v1.7/examples/k8s/traefik-deployment.yaml
 - name: Add Traefik Ingress deployment descriptor
   template:
     src: traefik-ingress.yaml.j2
@@ -15,17 +16,17 @@
   shell: |
     kubectl apply -f {{ install_temp_dir }}/traefik-ingress.yaml
 
-- name: create install dir
+- name: create install dir for Traefik certs
   file: path="{{ install_dir }}/traefik/ssl" state=directory
 
-- name: Generate RSA Key
+- name: Generate RSA Key for Traefik
   command: openssl genrsa \
     -out "{{ install_dir }}/traefik/ssl/key.pem" 2048
   args:
     creates: "{{ install_dir }}/traefik/ssl/key.pem"
   when: inventory_hostname in groups['master']
 
-- name: Generate CSR
+- name: Generate CSR for Traefik
   command: openssl req \
     -new \
     -subj '/C=US/ST=CA/L=San Jose/O=Traefik/CN={{ groups['master'][0] }}.{{ ansible_domain }}'
@@ -35,7 +36,7 @@
     creates: "{{ install_dir }}/traefik/ssl/csr.pem"
   when: inventory_hostname in groups['master']
 
-- name: Generate Self-signed Certificate
+- name: Generate Self-signed Certificate for Traefik
   command: openssl req \
     -x509 \
     -days 1825 \
@@ -49,17 +50,14 @@
 - name: Create K8s cert for Traefik
   shell: "kubectl -n kube-system create secret tls traefik-tls-cert --key={{ install_dir }}/traefik/ssl/key.pem --cert={{ install_dir }}/traefik/ssl/cert.pem"
 
-#https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
-- name: Dashboard security manifest
-  template:
-    src: dashboard-rbac.yaml.j2
-    dest: "{{ install_temp_dir }}/dashboard-rbac.yaml"
-    mode: 0644
+# Reference - https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
+# Use the following for retrieving a bearer token
+#  kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 
 - name: Install Dashboard
   shell: |
-     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml
-     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ install_temp_dir }}/dashboard-rbac.yaml
+     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v{{kube_dashboard_version}}/aio/deploy/alternative.yaml
+#     kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v{{kube_dashboard_version}}/aio/deploy/recommended.yaml
 
 - name: Add Dashboard Ingress deployment descriptor
   template:

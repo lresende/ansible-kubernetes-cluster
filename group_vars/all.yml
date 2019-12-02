@@ -17,6 +17,7 @@ install_dir: /opt
 
 # Components version
 kube_version: 1.14.8-0
+kube_dashboard_version: 2.0.0-beta8
 
 # Cri-tools version
 #1.13.X 	v1.13.0 	   master
