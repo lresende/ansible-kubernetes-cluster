@@ -14,7 +14,7 @@
 
 - name: Remove enterprise-gateway namespace
   shell: |
-    kubectl delete namespace enterprise-gateway --force --grace-period=45
+    kubectl delete namespace enterprise-gateway --force --grace-period=0
   when: inventory_hostname in groups['master']
   ignore_errors: yes
 
