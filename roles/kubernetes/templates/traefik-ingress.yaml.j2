@@ -1,12 +1,5 @@
 ---
 
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ingress-traefik
-
----
-
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
@@ -51,7 +44,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: traefik-ingress-controller
-  namespace: ingress-traefik
+  namespace: kube-system
 
 ---
 
@@ -59,20 +52,21 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: traefik-ingress-controller
-  namespace: ingress-traefik
+  namespace: kube-system
 
 ---
 
-kind: DaemonSet
+kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: traefik-ingress-controller
-  namespace: ingress-traefik
+  namespace: kube-system
   labels:
     k8s-app: traefik-ingress-lb
     app.kubernetes.io/name: ingress-traefik
     app.kubernetes.io/part-of: ingress-traefik
 spec:
+  replicas: 1
   selector:
     matchLabels:
       k8s-app: traefik-ingress-lb
@@ -91,7 +85,7 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       containers:
-      - image: traefik:1.7
+      - image: traefik:v1.7
         name: traefik-ingress-lb
         ports:
         - name: http
@@ -108,7 +102,7 @@ spec:
         args:
         - --api
         - --kubernetes
-        - --logLevel=INFO
+        - --logLevel=DEBUG
 
 ---
 
@@ -116,7 +110,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: traefik-ingress-service
-  namespace: ingress-traefik
+  namespace: kube-system
 spec:
   selector:
     k8s-app: traefik-ingress-lb
@@ -127,6 +121,7 @@ spec:
     - protocol: TCP
       port: 8080
       name: admin
+#  type: NodePort
 
 ---
 
@@ -134,7 +129,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: traefik-web-ui
-  namespace: ingress-traefik
+  namespace: kube-system
 spec:
   selector:
     k8s-app: traefik-ingress-lb
@@ -149,7 +144,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: traefik-web-ui
-  namespace: ingress-traefik
+  namespace: kube-system
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.frontend.rule.type: PathPrefixStrip
