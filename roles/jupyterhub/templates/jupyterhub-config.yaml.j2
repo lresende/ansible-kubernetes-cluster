@@ -1,7 +1,7 @@
 hub:
-  image:
-    name: lresende/k8s-hub
-    tag: latest
+#  image:
+#    name: lresende/k8s-hub
+#    tag: latest
   db:
     type: sqlite-memory
   extraConfig: |-
@@ -23,6 +23,8 @@ hub:
     c.KubeSpawner.namespace_name_template = 'hub-{username}'
 proxy:
   secretToken: "1be7550452613d3f1e95c687598c8e4a95e64fbc9efcba374fed187fc254c53f"
+  service:
+     type: NodePort
 
 auth:
   admin:
@@ -32,6 +34,8 @@ auth:
 
 ingress:
   enabled: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
   hosts:
     - {{ groups['master'][0] }}.{{ ansible_domain }}
 

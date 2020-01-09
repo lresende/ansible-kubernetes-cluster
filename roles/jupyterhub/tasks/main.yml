@@ -42,39 +42,39 @@
   ignore_errors: yes
   when: inventory_hostname in groups['master']
 
-- name: Remove original hub Role
-  shell: |
-    kubectl -n hub delete role hub
-  ignore_errors: yes
-  when: inventory_hostname in groups['master']
+# - name: Remove original hub Role
+#   shell: |
+#     kubectl -n hub delete role hub
+#   ignore_errors: yes
+#   when: inventory_hostname in groups['master']
 
-- name: Remove original hub RoleBinding
-  shell: |
-    kubectl -n hub delete rolebinding hub
-  ignore_errors: yes
-  when: inventory_hostname in groups['master']
+# - name: Remove original hub RoleBinding
+#   shell: |
+#     kubectl -n hub delete rolebinding hub
+#   ignore_errors: yes
+#   when: inventory_hostname in groups['master']
 
-# update hub service account to enable namespace creation, etc
-- name: Add JupyterHub RBAC update definition
-  template:
-    src: jupyterhub-rbac.yaml.j2
-    dest: "{{ install_temp_dir }}/jupyterhub-rbac.yaml"
-    mode: 0644
-  when: inventory_hostname in groups['master']
+# # update hub service account to enable namespace creation, etc
+# - name: Add JupyterHub RBAC update definition
+#   template:
+#     src: jupyterhub-rbac.yaml.j2
+#     dest: "{{ install_temp_dir }}/jupyterhub-rbac.yaml"
+#     mode: 0644
+#   when: inventory_hostname in groups['master']
 
-- name: Update JupyterHub RBAC definition
-  shell: |
-    kubectl apply -f {{ install_temp_dir }}/jupyterhub-rbac.yaml
-  when: inventory_hostname in groups['master']
+# - name: Update JupyterHub RBAC definition
+#   shell: |
+#     kubectl apply -f {{ install_temp_dir }}/jupyterhub-rbac.yaml
+#   when: inventory_hostname in groups['master']
 
 - name: download nb2kg image
   shell: |
     docker pull elyra/nb2kg:dev
 
-- name: download hub image
-  shell: |
-    docker rmi lresende/k8s-hub:latest
-    docker pull lresende/k8s-hub:latest
+# - name: download hub image
+#   shell: |
+#     docker rmi lresende/k8s-hub:latest
+#     docker pull lresende/k8s-hub:latest
 
 #
 # Configure NFS on master
