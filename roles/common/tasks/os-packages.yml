@@ -1,7 +1,15 @@
+# RHEL 7.x
 - name: Update repository subscription on FYRE
   shell:
      cd /etc/yum.repos.d ; rm -f devit-rh7-x86_64.repo* ; wget fyreyum1.fyre.ibm.com/redhat/devit-rh7-x86_64.repo; sed -i 's/enabled = 1/enabled = 0/' /etc/yum/pluginconf.d/rhnplugin.conf
-  when: ansible_domain | search("fyre.ibm.com")
+  when: '"fyre.ibm.com" in ansible_domain'
+
+# RHEL 8.x
+#- name: Update repository subscription on FYRE
+#  shell:
+#    cd /etc/yum.repos.d ; rm -f devit-rh8-x86_64-cd.repo* ; wget fyreyum1.fyre.ibm.com/redhat/devit-rh8-x86_64-cd.repo; sed -i 's/enabled = 1/enabled = 0/' /etc/yum/pluginconf.d/subscription-manager.conf
+#  when: '"fyre.ibm.com" in ansible_domain'
+
 
 - name: install commonly used os dependencies
   shell:
