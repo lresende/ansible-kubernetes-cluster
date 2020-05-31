@@ -9,7 +9,9 @@
   file: path="{{ install_temp_dir }}" state=directory
 
 #
-# Based on documentation from https://zero-to-jupyterhub.readthedocs.io/en/latest/
+# Based on documentation from:
+# https://zero-to-jupyterhub.readthedocs.io/en/latest/
+# https://zero-to-jupyterhub.readthedocs.io/en/latest/setup-jupyterhub/setup-jupyterhub.html
 #
 
 - name: Remove previous installation of JupyterHub
@@ -23,6 +25,13 @@
     helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
     helm repo update
   when: inventory_hostname in groups['master']
+
+- name: Create JupyterHub secretToken
+  command: "openssl rand -hex 32"
+  register: temp_jupyterhub_secret_token
+
+- name: Store JupyterHub secretToken fact
+  set_fact: jupyterhub_secret_token={{ temp_jupyterhub_secret_token.stdout }}
 
 - name: Create JupyterHub helm chart configuration
   template:

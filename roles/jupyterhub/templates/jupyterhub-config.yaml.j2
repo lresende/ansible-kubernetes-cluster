@@ -22,7 +22,7 @@ hub:
     c.Spawner.cmd = ['jupyter-labhub']
     c.KubeSpawner.namespace_name_template = 'hub-{username}'
 proxy:
-  secretToken: "1be7550452613d3f1e95c687598c8e4a95e64fbc9efcba374fed187fc254c53f"
+  secretToken: "{{ jupyterhub_secret_token }}"
   service:
      type: NodePort
 
