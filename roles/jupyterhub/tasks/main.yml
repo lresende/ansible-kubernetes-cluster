@@ -16,6 +16,12 @@
 
 - name: Remove previous installation of JupyterHub
   shell: |
+    helm delete hub --purge
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+- name: Remove Kubernetes namespace used by JupyterHub
+  shell: |
     kubectl delete namespace {{ jupyterhub.namespace }}
   ignore_errors: yes
   when: inventory_hostname in groups['master']
