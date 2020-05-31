@@ -30,7 +30,7 @@
 - name: download enterprise gateway yaml file, replace image tag and deploy enterprise-gateway
   block:
     - get_url:
-        url: https://raw.githubusercontent.com/jupyter-incubator/enterprise_gateway/{{ jupyter_enterprise_gateway.version }}/etc/kubernetes/enterprise-gateway.yaml
+        url: https://raw.githubusercontent.com/jupyter/enterprise_gateway/v{{ jupyter_enterprise_gateway.version }}/etc/kubernetes/enterprise-gateway.yaml
         dest: "{{ install_temp_dir }}/enterprise-gateway.yaml"
     - replace:
         path: "{{ install_temp_dir }}/enterprise-gateway.yaml"
