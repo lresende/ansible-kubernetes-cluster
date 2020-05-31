@@ -82,9 +82,10 @@
 #     kubectl apply -f {{ install_temp_dir }}/jupyterhub-rbac.yaml
 #   when: inventory_hostname in groups['master']
 
-- name: download nb2kg image
+- name: download singleuser image
   shell: |
-    docker pull elyra/nb2kg:dev
+    docker pull elyra/elyra:latest
+    docker pull elyra/elyra:dev
 
 # - name: download hub image
 #   shell: |
