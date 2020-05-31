@@ -1,3 +1,3 @@
 jupyter_enterprise_gateway:
-  version: master
-  image_tag: dev
+  version: 2.1.1
+  image_tag: 2.1.1
