@@ -99,9 +99,21 @@
 #   https://developer.ibm.com/code/howtos/add-nfs-provisioner-to-ICP
 #   https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-centos-6
 
+- name: stop all NFS services on all nodes
+  shell: |
+    chkconfig nfslock off
+    chkconfig rpcgssd off
+    chkconfig rpcidmapd off
+    chkconfig portmap off
+    chkconfig nfs off
+
+- name: Uninstall NFS on all nodes
+  shell: |
+    yum remove -y portmap nfs-utils nfs-utils-lib
+
 - name: install NFS on all nodes
   shell: |
-     yum install -y nfs-utils nfs-utils-lib
+     yum install -y portmap nfs-utils nfs-utils-lib
 
 - name: create hub home directory
   file: path="{{ jupyterhub.home_dir }}" state=directory
@@ -113,9 +125,17 @@
 
 - name: configure NFS
   shell: |
-     chkconfig nfs on
-     service rpcbind start
-     service nfs start
+    chkconfig nfslock on
+    chkconfig rpcgssd on
+    chkconfig rpcidmapd on
+    chkconfig portmap on
+    chkconfig nfs on
+    service nfslock start
+    service rpcgssd start
+    service rpcidmapd start
+    service portmap start
+    service nfs start
+
   when: inventory_hostname in groups['master']
 
 - name: Create JupyterHub NSF service descriptor
