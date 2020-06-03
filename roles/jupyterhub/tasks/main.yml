@@ -87,7 +87,6 @@
 
 - name: download singleuser image
   shell: |
-    docker pull elyra/elyra:latest
     docker pull elyra/elyra:dev
 
 # - name: download hub image
