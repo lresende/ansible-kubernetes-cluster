@@ -19,7 +19,6 @@ hub:
             return env
     c.JupyterHub.spawner_class = CustomKubeSpawner
     config = '/etc/jupyter/jupyter_notebook_config.py'
-    c.Spawner.cmd = ['jupyter-labhub']
 #    c.KubeSpawner.namespace_name_template = 'hub-{username}'
 proxy:
   secretToken: "{{ jupyterhub_secret_token }}"
