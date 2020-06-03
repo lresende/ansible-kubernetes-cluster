@@ -1,6 +1,12 @@
-# Kubernetes and Spark on Kubernetes
+# Deploy a self-service Notebook environment on Kubernetes cluster
 
-This repository defines multiple ansible roles to help deploying and configuring a Kubernetes cluster
+This repository defines multiple [Ansible Roles](https://www.ansible.com/) to help deploying and configuring
+a Kubernetes cluster with [JupyterHub](https://github.com/jupyterhub/jupyterhub),
+[Jupyter Enterprise Gateway](https://github.com/jupyter/enterprise_gateway) and
+[Elyra](https://github.com/elyra-ai/elyra) extensions to 
+[JupyterLab Notebooks](https://github.com/jupyterlab/jupyterlab).
+
+![Deployment Diagram](./docs/images/elyra-deployment-diagram.png)
 
 # Requirements
 
@@ -45,11 +51,19 @@ command_warnings = False
 * RHEL 7.x
 * Ansible 2.9.9
 
+# Deployment
 
-# Defining your cluster deployment metadata (host inventory)
+## Available deployment Ansible Roles
+* **common:** Basic OS updates and configurations common to all scenarios
+* **kubernetes:** Basic Kubernetes platform and utilities required to run either Jupyter or Spark environments
+* **jupyter-enterprise-gateway:** Deploy necessary images for Jupyter Enterprise Gateway and supported kernels
+* **jupyterhub:** Deploy JupyterHub environment using custom Notebook image for remote kernels (using Enterprise Gateway)
+
+
+## Defining deployment metadata (host inventory)
 
 Ansible uses 'host inventory' files to define the cluster configuration, nodes, and groups of nodes
-that serves a given purpose (e.g. master node).
+that serves a given purpose (e.g. master node, worker nodes, etc).
 
 Below is a host inventory sample definition:
 
@@ -66,27 +80,21 @@ lresende-kube-node-4   ansible_host=9.30.188.36   ansible_host_private=172.16.20
 lresende-kube-node-5   ansible_host=9.30.188.38   ansible_host_private=172.16.210.6
 ```
 
-# Deploying Kubernetes
+## Deployment of Kubernetes and a self-service notebook environment 
 
-### Deployment playbook
+The sample `setup-kubernetes.yml` playbook deploys a Kubernetes cluster and configure JupyterHub
+and Elyra extensions to JupyterLab Notebooks.
 
-The sample playbook below can be used to deploy an Spark using an HDP distribution
-
-```
+```yaml
 - name: setup kubernetes
   hosts: all
   remote_user: root
   roles:
     - role: common
     - role: kubernetes
-#   - role: jupyter-enterprise-gateway
-#   - role: jupyterhub
+    - role: jupyter-enterprise-gateway
+    - role: jupyterhub
 ```
-
-### Other roles available
-
-* **jupyter-enterprise-gateway:** Deploy necessary images for Jupyter Enterprise Gateway and supported kernels
-* **jupyterhub (experimental):** Deploy JupyterHub environment using custom Notebook image for remote kernels (using Enterprise Gateway)
 
 ### Deploying
 
@@ -100,29 +108,4 @@ Example:
 ansible-playbook --verbose setup-kubernetes.yml -c paramiko -i hosts-fyre-kubernetes
 ```
 
-# Deploying Spark on Kubernetes
-
-
-### Deployment playbook
-
-```
-- name: setup spark
-  hosts: all
-  remote_user: root
-  roles:
-    - role: common
-    - role: spark
-```
-
-### Deploying
-
-```
-ansible-playbook --verbose <deployment playbook.yml> -i <hosts inventory>
-```
-
-Example:
-
-```
-ansible-playbook --verbose setup-spark.yml -c paramiko -i hosts-fyre-kubernetes
-```
 
