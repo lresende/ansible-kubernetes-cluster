@@ -50,8 +50,8 @@ singleuser:
     dynamic:
       storageClass: nfs-dynamic
   extraEnv:
-    KG_URL: http://{{ groups['master'][0] }}.{{ ansible_domain }}/gateway
-    KG_REQUEST_TIMEOUT: "60"
+    JUPYTER_GATEWAY_URL: http://{{ groups['master'][0] }}.{{ ansible_domain }}/gateway
+    KG_REQUEST_TIMEOUT: "120"
 
 rbac:
   enabled: true
