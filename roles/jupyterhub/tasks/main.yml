@@ -35,9 +35,11 @@
 - name: Create JupyterHub secretToken
   command: "openssl rand -hex 32"
   register: temp_jupyterhub_secret_token
+  when: inventory_hostname in groups['master']
 
 - name: Store JupyterHub secretToken fact
   set_fact: jupyterhub_secret_token={{ temp_jupyterhub_secret_token.stdout }}
+  when: inventory_hostname in groups['master']
 
 - name: Create JupyterHub helm chart configuration
   template:
@@ -49,6 +51,7 @@
 - name: Install JupyterHub
   shell: |
     helm upgrade --install --force hub jupyterhub/jupyterhub --namespace {{ jupyterhub.namespace }} --version {{ jupyterhub.helm_version }} --values {{ install_temp_dir }}/jupyterhub-config.yaml
+  ignore_errors: yes
   when: inventory_hostname in groups['master']
 
 - name: Wait for pods to be initialized
