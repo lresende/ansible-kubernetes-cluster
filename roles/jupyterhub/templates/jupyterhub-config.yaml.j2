@@ -43,6 +43,7 @@ singleuser:
   defaultUrl: "/lab"
   image:
     name: elyra/elyra
+    # change to a specific release version as appropriated
     tag: dev
     # disable this in a production environment
     pullPolicy: "Always"
@@ -51,7 +52,7 @@ singleuser:
       storageClass: nfs-dynamic
   extraEnv:
     JUPYTER_GATEWAY_URL: http://{{ groups['master'][0] }}.{{ ansible_domain }}/gateway
-    KG_REQUEST_TIMEOUT: "120"
+    JUPYTER_GATEWAY_REQUEST_TIMEOUT: "120"
 
 rbac:
   enabled: true
