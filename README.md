@@ -49,7 +49,7 @@ command_warnings = False
 ### Supported/Tested Platform
 
 * RHEL 7.x
-* Ansible 2.9.9
+* Ansible 2.10.3
 
 # Deployment
 
