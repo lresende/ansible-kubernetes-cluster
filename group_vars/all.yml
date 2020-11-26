@@ -15,8 +15,8 @@ host_key_checking: False
 install_temp_dir: /tmp/ansible-install
 install_dir: /opt
 
-# Components version
-kube_version: 1.16.8-0
+# Components version (ibm 1.18.12)
+kube_version: 1.16.15-0
 kube_dashboard_version: 2.0.0
 
 # Cri-tools version
