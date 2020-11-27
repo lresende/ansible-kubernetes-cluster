@@ -35,7 +35,7 @@ crictl_version: v1.19.0
 
 calico_version: v3.17
 
-helm_version: 2.16.1
+helm_version: 2.16.7
 
 # Kubernetes internal network for services.
 # Kubernetes services will get fake IP addresses from this range.
