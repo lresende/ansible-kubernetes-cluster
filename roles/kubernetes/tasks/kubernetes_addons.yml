@@ -1,11 +1,12 @@
 
-#https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/#requirements
+# https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/#requirements
+# https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises
 - name: Install Calico Network
   shell: |
-    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/{{ calico_version }}/manifests/calico.yaml
 
-#https://kubernetes.github.io/ingress-nginx/deploy/
-##https://github.com/containous/traefik/blob/v1.7/examples/k8s/traefik-deployment.yaml
+# https://kubernetes.github.io/ingress-nginx/deploy/
+# https://github.com/containous/traefik/blob/v1.7/examples/k8s/traefik-deployment.yaml
 - name: Add Traefik Ingress deployment descriptor
   template:
     src: traefik-ingress.yaml.j2
