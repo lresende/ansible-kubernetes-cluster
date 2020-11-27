@@ -77,11 +77,24 @@
 - debug:
      msg: "Downloading cri-tools from: http://github.com/kubernetes-incubator/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-linux-amd64.tar.gz"
 
+
+- debug:
+     msg: "Downloading crictl from: http://github.com/kubernetes-incubator/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-linux-amd64.tar.gz"
+
 - name: Install crictl
   shell: |
      wget http://github.com/kubernetes-incubator/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-linux-amd64.tar.gz
      tar -xvf crictl-{{ crictl_version }}-linux-amd64.tar.gz --directory /usr/bin/
      rm -rf crictl-{{ crictl_version }}-linux-amd64.tar.gz
+
+- debug:
+     msg: "Downloading critest from: http://github.com/kubernetes-incubator/cri-tools/releases/download/{{ crictl_version }}/critest-{{ crictl_version }}-linux-amd64.tar.gz"
+
+- name: Install critest
+  shell: |
+     wget http://github.com/kubernetes-incubator/cri-tools/releases/download/{{ crictl_version }}/critest-{{ crictl_version }}-linux-amd64.tar.gz
+     tar -xvf critest-{{ crictl_version }}-linux-amd64.tar.gz --directory /usr/bin/
+     rm -rf critest-{{ crictl_version }}-linux-amd64.tar.gz
 
 - name: Set Kubernetes Config env variable
   template:
