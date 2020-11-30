@@ -1,10 +1,8 @@
-
 [master]
-lresende-k8-node-1   ansible_host=9.30.247.138   ansible_host_private=172.16.200.219   ansible_host_id=1
+lresende-k8-node-1   ansible_host=9.30.248.183   ansible_host_private=10.11.17.228   ansible_host_id=1
 
 [nodes]
-lresende-k8-node-2   ansible_host=9.30.194.212   ansible_host_private=172.16.203.188   ansible_host_id=2
-lresende-k8-node-3   ansible_host=9.30.194.233   ansible_host_private=172.16.203.215   ansible_host_id=3
-lresende-k8-node-4   ansible_host=9.30.195.99   ansible_host_private=172.16.203.218   ansible_host_id=4
-lresende-k8-node-5   ansible_host=9.30.195.149   ansible_host_private=172.16.203.221   ansible_host_id=5
-
+lresende-k8-node-2   ansible_host=9.30.248.231   ansible_host_private=10.11.24.198   ansible_host_id=2
+lresende-k8-node-3   ansible_host=9.30.253.59   ansible_host_private=10.11.28.171   ansible_host_id=3
+lresende-k8-node-4   ansible_host=9.30.45.150   ansible_host_private=10.11.28.206   ansible_host_id=4
+lresende-k8-node-5   ansible_host=9.30.218.55   ansible_host_private=10.11.29.26   ansible_host_id=5
