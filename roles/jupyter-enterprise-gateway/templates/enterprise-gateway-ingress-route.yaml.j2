@@ -1,0 +1,29 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  namespace: enterprise-gateway
+  name: enterprise-gateway-ingress-route
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ groups['master'][0] }}.{{ ansible_domain }}`) && (PathPrefix(`/gateway`))
+      kind: Rule
+      services:
+      - kind: Service
+        name: enterprise-gateway
+        port: 8888
+      middlewares:
+      - name: enterprise-gateway-stripprefix
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  namespace: enterprise-gateway
+  name: enterprise-gateway-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /gateway
+    forceSlash: true
