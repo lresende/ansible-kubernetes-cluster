@@ -18,52 +18,39 @@
     chmod u+x /opt/helm/helm
     ln -s /opt/helm/helm /usr/local/bin/helm
 
+# Install Traefik using Helm
+- name: Add Traefik Helm chart repository
+  shell: |
+    helm repo add traefik https://helm.traefik.io/traefik
+    helm repo update
 
-# https://kubernetes.github.io/ingress-nginx/deploy/
-# https://github.com/containous/traefik/blob/v1.7/examples/k8s/traefik-deployment.yaml
-- name: Add Traefik Ingress deployment descriptor
+
+- name: Install Traefik
+  shell: |
+    helm install traefik traefik/traefik
+
+- name: Add Traefik Dashboard ingress
   template:
-    src: traefik-ingress.yaml.j2
-    dest: "{{ install_temp_dir }}/traefik-ingress.yaml"
+    src: traefik-dashboard-ingress-route.yaml.j2
+    dest: "{{ install_temp_dir }}/traefik-dashboard-ingress-route.yaml"
     mode: 0644
+
+- name: Wait for traefik to be ready
+  pause:
+     minutes: 1
+
+- name: service content
+  shell: |
+    kubectl get svc/traefik -o yaml
+  register: temp_service_content
+
+- name: Update Traefik service with clusterIP
+  shell: |
+    kubectl get svc/traefik -o yaml | sed -e "s/^spec:/spec:\n  externalIPs:\n    - {{ hostvars[groups['master'][0]].ansible_host }}/" | kubectl apply -f -
 
 - name: Install Traefik Ingress Controller
   shell: |
-    kubectl apply -f {{ install_temp_dir }}/traefik-ingress.yaml
-
-- name: create install dir for Traefik certs
-  file: path="{{ install_dir }}/traefik/ssl" state=directory
-
-- name: Generate RSA Key for Traefik
-  command: openssl genrsa \
-    -out "{{ install_dir }}/traefik/ssl/key.pem" 2048
-  args:
-    creates: "{{ install_dir }}/traefik/ssl/key.pem"
-  when: inventory_hostname in groups['master']
-
-- name: Generate CSR for Traefik
-  command: openssl req \
-    -new \
-    -subj '/C=US/ST=CA/L=San Jose/O=Traefik/CN={{ groups['master'][0] }}.{{ ansible_domain }}'
-    -key "/opt/traefik/ssl/key.pem" \
-    -out "/opt/traefik/ssl/csr.pem"
-  args:
-    creates: "{{ install_dir }}/traefik/ssl/csr.pem"
-  when: inventory_hostname in groups['master']
-
-- name: Generate Self-signed Certificate for Traefik
-  command: openssl req \
-    -x509 \
-    -days 1825 \
-    -key "{{ install_dir }}/traefik/ssl/key.pem" \
-    -in "{{ install_dir }}/traefik/ssl/csr.pem" \
-    -out "{{ install_dir }}/traefik/ssl/cert.pem"
-  args:
-    creates: "{{ install_dir }}/traefik/ssl/cert.pem"
-  when: inventory_hostname in groups['master']
-
-- name: Create K8s cert for Traefik
-  shell: "kubectl -n kube-system create secret tls traefik-tls-cert --key={{ install_dir }}/traefik/ssl/key.pem --cert={{ install_dir }}/traefik/ssl/cert.pem"
+    kubectl apply -f {{ install_temp_dir }}/traefik-dashboard-ingress-route.yaml
 
 # Reference - https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 # Use the following for retrieving a bearer token

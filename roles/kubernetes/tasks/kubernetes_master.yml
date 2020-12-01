@@ -22,7 +22,7 @@
 # sleep 10; while true; do incomplete=$(kubectl get pod --all-namespaces | tail -n +2 | grep -Ev '([0-9]+)/\1') || break; sleep 10; done
 - name: Wait for all pods to be ready
   pause:
-     minutes: 3
+     minutes: 1
 
 - name: Print status of all pods
   shell: |
