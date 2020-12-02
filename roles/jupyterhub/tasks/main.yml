@@ -16,7 +16,7 @@
 
 - name: Remove previous installation of JupyterHub
   shell: |
-    helm delete hub --purge
+    helm delete hub
   ignore_errors: yes
   when: inventory_hostname in groups['master']
 
@@ -48,10 +48,15 @@
     mode: 0644
   when: inventory_hostname in groups['master']
 
+- name: Creates Kubernetes namespace used by JupyterHub
+  shell: |
+    echo -e "apiVersion: v1\nkind: Namespace\nmetadata:\n  name: {{ jupyterhub.namespace }}" | kubectl apply -f -
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
 - name: Install JupyterHub
   shell: |
-    helm upgrade --install --force hub jupyterhub/jupyterhub --namespace {{ jupyterhub.namespace }} --version {{ jupyterhub.helm_version }} --values {{ install_temp_dir }}/jupyterhub-config.yaml
-  ignore_errors: yes
+    helm install hub jupyterhub/jupyterhub --namespace {{ jupyterhub.namespace }} --version {{ jupyterhub.helm_version }} --values {{ install_temp_dir }}/jupyterhub-config.yaml
   when: inventory_hostname in groups['master']
 
 - name: Wait for pods to be initialized
