@@ -24,7 +24,6 @@
     helm repo add traefik https://helm.traefik.io/traefik
     helm repo update
 
-
 - name: Install Traefik
   shell: |
     helm install traefik traefik/traefik

@@ -75,10 +75,6 @@
      yum install -y kubectl-{{ kube_version }}.x86_64
 
 - debug:
-     msg: "Downloading cri-tools from: http://github.com/kubernetes-incubator/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-linux-amd64.tar.gz"
-
-
-- debug:
      msg: "Downloading crictl from: http://github.com/kubernetes-incubator/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-linux-amd64.tar.gz"
 
 - name: Install crictl
