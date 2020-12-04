@@ -92,7 +92,7 @@
 
 - name: download singleuser image
   shell: |
-    docker pull quay.io/elyra/elyra:latest
+    docker pull quay.io/elyra/elyra:dev
 
 # - name: download hub image
 #   shell: |
