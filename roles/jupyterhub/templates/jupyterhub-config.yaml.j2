@@ -51,6 +51,7 @@ singleuser:
     dynamic:
       storageClass: nfs-dynamic
   extraEnv:
+    JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
     JUPYTER_GATEWAY_URL: http://{{ groups['master'][0] }}.{{ ansible_domain }}/gateway
     JUPYTER_GATEWAY_REQUEST_TIMEOUT: "120"
 
